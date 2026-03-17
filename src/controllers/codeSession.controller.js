@@ -2,6 +2,7 @@ import { generateTemplateCode } from "../utils/codeGenerator.util.js";
 import * as codeSessionModel from "../models/codeSession.model.js";
 import * as executionModel from "../models/execution.model.js";
 import executionQueue from "../queues/execution.queue.js";
+import timeTracker from "../utils/timeTracker.util.js";
 
 class CodeSessionController {
     // [POST] - /code-sessions
@@ -67,13 +68,17 @@ class CodeSessionController {
 
             const [execution] = await executionModel.createExecution({ session_id: session.id });
 
+            console.log(`LOG: [SERVER]\t[QUEUED]\t[${execution.id}]`)
+            console.log(`LOG TIME: [SERVER]\t[START TRACKING TIME]`)
+            timeTracker.start();
+
             await executionQueue.add("run-code", {
                 execution_id: execution.id,
                 session_id,
                 language: session.language,
                 source_code: session.source_code
             })
-            console.log(`LOG: [SERVER]\t[QUEUED]\t[${execution.id}]`)
+
 
             res.json({
                 execution_id: execution.id,
