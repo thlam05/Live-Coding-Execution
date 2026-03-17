@@ -1,4 +1,4 @@
-import { exec } from "child_process";
+import { exec, spawn } from "child_process";
 import { writeFileSourceCode } from "../utils/file.util.js";
 
 const ALLOWED_LANGUAGES = ["javascript", "python"];
@@ -25,21 +25,47 @@ export function runCode({ language, source_code, execution_id }) {
     }
 
     return new Promise((resolve) => {
-        exec(
-            command,
-            { timeout: 2000 },
-            (error, stdout, stderr) => {
-                if (error) {
-                    return resolve({
-                        stdout,
-                        stderr: error.killed
-                            ? "Execution timed out"
-                            : stderr || error.message
-                    });
-                }
+        const [_command, ...args] = command.split(' ');
 
-                resolve({ stdout, stderr });
+        const child = spawn(_command, args, {
+            timeout: 2000,
+            shell: false
+        });
+
+        let stdout = '';
+        let stderr = '';
+
+        child.stdout.on('data', (data) => {
+            stdout += data.toString();
+        });
+
+        child.stderr.on('data', (data) => {
+            stderr += data.toString();
+        });
+
+        child.on('error', (error) => {
+            resolve({
+                stdout,
+                stderr: error.message
+            });
+        });
+
+        child.on('close', (code, signal) => {
+            if (signal === 'SIGTERM' || child.killed) {
+                return resolve({
+                    stdout,
+                    stderr: "Execution timed out"
+                });
             }
-        );
+
+            if (code !== 0) {
+                return resolve({
+                    stdout,
+                    stderr: stderr || `Process exited with code ${code}`
+                });
+            }
+
+            resolve({ stdout, stderr });
+        });
     });
 }

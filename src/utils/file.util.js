@@ -6,12 +6,12 @@ export function writeFileSourceCode({ language, source_code, execution_id }) {
     let fileName;
 
     if (language === "javascript") {
-        folderPath = path.resolve("source_code");
-        fileName = `javascript.js`;
+        folderPath = path.resolve("source_code/javascript");
+        fileName = `${execution_id}.js`;
     }
     else if (language === "python") {
-        folderPath = path.resolve("source_code");
-        fileName = `python.py`;
+        folderPath = path.resolve("source_code/python");
+        fileName = `${execution_id}.py`;
     }
     else {
         throw new Error("Unsupported language");
