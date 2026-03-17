@@ -2,6 +2,7 @@ import db from "../configs/db.js"
 import templateCode from "../utils/templateCode.js";
 import * as codeSessionModel from "../models/codeSession.model.js";
 import * as executionModel from "../models/execution.model.js";
+import executionQueue from "../queues/executionQueue.js";
 
 class CodeSessionController {
     // [POST] - /code-sessions
@@ -68,9 +69,16 @@ class CodeSessionController {
 
             const [execution] = await executionModel.createExecution({ session_id: session.id });
 
+            await executionQueue.add("run-code", {
+                execution_id: execution.id,
+                session_id,
+                language: session.language,
+                source_code: session.source_code
+            })
+
             res.json({
                 execution_id: execution.id,
-                status: execution.status
+                status: "QUEUED"
             })
         } catch (err) {
             res.json({
