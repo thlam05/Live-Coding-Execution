@@ -1,8 +1,7 @@
-import db from "../configs/db.js"
-import templateCode from "../utils/templateCode.js";
+import { generateTemplateCode } from "../utils/codeGenerator.util.js";
 import * as codeSessionModel from "../models/codeSession.model.js";
 import * as executionModel from "../models/execution.model.js";
-import executionQueue from "../queues/executionQueue.js";
+import executionQueue from "../queues/execution.queue.js";
 
 class CodeSessionController {
     // [POST] - /code-sessions
@@ -10,11 +9,7 @@ class CodeSessionController {
         try {
             const { language } = req.body;
 
-            let source_code = "";
-
-            if (language == "python") source_code = templateCode.python;
-            else if (language == "javascript") source_code = templateCode.javascript;
-            else if (language == "cpp") source_code = templateCode.cpp;
+            let source_code = generateTemplateCode(language);
 
             const [session] = await codeSessionModel.createLiveCodingSession({
                 language,

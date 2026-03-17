@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "dev": "concurrently \"nodemon src/server.js\" \"nodemon src/workers/executionWorker.js\"",
+    "dev": "concurrently \"nodemon src/server.js\" \"nodemon src/workers/execution.worker.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
