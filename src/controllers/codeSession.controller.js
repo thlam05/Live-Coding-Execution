@@ -17,6 +17,8 @@ class CodeSessionController {
                 status: "ACTIVE"
             });
 
+            console.log(`LOG: [SERVER]\t[CREATE CODE SESSION]`);
+
             res.json({
                 session_id: session.id,
                 status: session.status
@@ -39,6 +41,7 @@ class CodeSessionController {
                 language,
                 source_code
             })
+            console.log(`LOG: [SERVER]\t[SAVE CODE SESSION]`);
 
             res.json({
                 session_id: session.id,
@@ -70,6 +73,7 @@ class CodeSessionController {
                 language: session.language,
                 source_code: session.source_code
             })
+            console.log(`LOG: [SERVER]\t[QUEUED]\t[${execution.id}]`)
 
             res.json({
                 execution_id: execution.id,

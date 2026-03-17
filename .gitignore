@@ -49,3 +49,8 @@ temp/
 
 # Optional eslint cache
 .eslintcache
+
+
+source_code/
+source_code/javascript
+source_code/python

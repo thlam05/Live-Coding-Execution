@@ -2,18 +2,7 @@
 const templateCode = {
     python: `print("Hello World")`,
 
-    javascript: `console.log("Hello World")`,
-
-    cpp: `
-    #include <bits/stdc++.h>
-    using namespace std;
-
-    int main() {
-        cout << "Hello World";    
-
-        return 0;
-    }
-    `
+    javascript: `console.log("Hello World")`
 }
 
 
