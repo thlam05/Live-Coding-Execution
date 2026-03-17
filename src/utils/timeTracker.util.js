@@ -11,6 +11,7 @@ class TimeTracker {
     }
 
     stop() {
+        this.reset();
         this.endTime = performance.now();
         this.running = false;
         return this.duration;
