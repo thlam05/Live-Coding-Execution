@@ -14,3 +14,10 @@ export function getExecution({ execution_id }) {
     return db("executions")
         .where({ id: execution_id })
 }
+
+export function updateExecution({ execution_id, ...execution_data }) {
+    return db("executions")
+        .where({ id: execution_id })
+        .update(execution_data)
+        .returning("*");
+}

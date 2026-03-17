@@ -78,7 +78,8 @@ class CodeSessionController {
 
             res.json({
                 execution_id: execution.id,
-                status: "QUEUED"
+                status: "QUEUED",
+                queued_at: new Date()
             })
         } catch (err) {
             res.json({
