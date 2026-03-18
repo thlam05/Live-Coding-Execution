@@ -1,5 +1,5 @@
 import { Worker } from "bullmq";
-import connection from "../queues/redis.js";
+import connection from "../configs/redis.js";
 import * as executionModel from "../models/execution.model.js";
 import { runCode } from "../services/codeRunner.service.js";
 import timeTracker from "../utils/timeTracker.util.js";
