@@ -5,6 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "dev": "concurrently \"nodemon src/server.js\" \"nodemon src/workers/execution.worker.js\"",
+    "start": "node src/server.js",
+    "worker": "node src/workers/execution.worker.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
