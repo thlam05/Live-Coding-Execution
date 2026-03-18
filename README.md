@@ -114,7 +114,7 @@ graph TD
     B --> C[Redis Queue]
     C --> D[Worker]
     D --> E[Execution Environment]
-    D --> F[PostgreSQL]
+    B --> F[PostgreSQL]
 ```
 
 ### Flow Diagram (run execution)
@@ -127,10 +127,18 @@ sequenceDiagram
     participant Exec as Execution Environment
     participant DB as PostgreSQL
 
+    Client->>API: Create code session
+    API->>DB: Insert session
+    API-->>Client: Return session
+
+    Client->>API: Save code
+    API->>DB: Update session
+    API-->>Client: Confirm save
+
     Client->>API: Send code execution request
     API->>API: Validate input
     API->>Queue: Add job to queue
-    API->>Client: Response status QUEUED
+    API-->>Client: Response status QUEUED
 
     Queue->>Worker: Dispatch job
     Worker->>Exec: Execute code
@@ -139,17 +147,73 @@ sequenceDiagram
     Worker->>DB: Save result
 
     Client->>API: Get execution result
-    DB->>API: Query data execution
-    API->>Client: Response execution result
+    DB-->>API: Query data execution
+    API-->>Client: Response execution result
 ```
 
 ## API documentation
 ### Base URL: `http://localhost:3000`
 
 1. Create code session
+#### End point: `POST /code_sessions
+#### Request Body
+``` json
+{
+    "language": "javascript"
+}
+```
+#### Response
+``` json
+{
+    "session_id": "session_id",
+    "status": "ACTIVE"
+}
+```
 2. Save code session
+#### End point: `PATCH  /code-sessions/{session_id}`
+#### Request Body
+``` json
+{
+    "language": "javascript",
+    "source_code": "console.log(\"Hello world\")"
+}
+```
+#### Response
+``` json
+{
+    "session_id": "session_id",
+    "status": "ACTIVE"
+}
+```
 3. Execute code session
+#### End point: `POST /code-sessions/{session_id}/run`
+#### Request Body
+``` json
+```
+#### Response
+``` json
+{
+    "execution_id": "execution_id",
+    "status": "QUEUED",
+    "queued_at": "timestamp"
+}
+```
 4. Get execution
+#### End point: `GET /executions/{execution_id}`
+#### Response
+``` json
+{
+    "id": "execution_id",
+    "session_id": "session_id",
+    "status": "COMPLETED",
+    "stdout": "Hello world\n",
+    "stderr": "",
+    "execution_time_ms": 0,
+    "queued_at": "timestamp",
+    "started_at": "timestamp",
+    "finished_at": "timestamp"
+}
+```
 
 ## Design decisions and trade-offs
 1. Api server
@@ -183,4 +247,7 @@ sequenceDiagram
 - Slightly slower than in-memory storage
 - Requires schema management and migrations
 
-
+## What I Would Improve With More Time
+- Add unit test
+- Execute user-submitted code inside an isolated sandbox environment
+- Manage code session (expire, black-list, ...)
