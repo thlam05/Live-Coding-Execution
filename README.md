@@ -114,7 +114,7 @@ graph TD
     B --> C[Redis Queue]
     C --> D[Worker]
     D --> E[Execution Environment]
-    D --> F[PostgreSQL]
+    B --> F[PostgreSQL]
 ```
 
 ### Flow Diagram (run execution)
