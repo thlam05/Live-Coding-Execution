@@ -247,4 +247,7 @@ sequenceDiagram
 - Slightly slower than in-memory storage
 - Requires schema management and migrations
 
-
+## What I Would Improve With More Time
+- Add unit test
+- Execute user-submitted code inside an isolated sandbox environment
+- Manage code session (expire, black-list, ...)
