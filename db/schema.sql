@@ -6,8 +6,6 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE TABLE code_sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   language VARCHAR(20),
-  template_code VARCHAR(20),
-  environment VARCHAR(20),
   source_code TEXT,
   status VARCHAR(20) DEFAULT 'ACTIVE',
   created_at TIMESTAMP DEFAULT NOW(),

@@ -8,9 +8,7 @@ class ExecutionController {
 
             const [execution] = await executionModel.getExecution({ execution_id });
 
-            res.json({
-                execution: execution
-            })
+            res.json(execution);
         } catch (err) {
             res.json({
                 error: err.message
