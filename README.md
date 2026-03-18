@@ -139,7 +139,7 @@ sequenceDiagram
     Worker->>DB: Save result
 
     Client->>API: Get execution result
-    PostgreSQL->>API: Query data execution
+    DB->>API: Query data execution
     API->>Client: Response execution result
 ```
 
